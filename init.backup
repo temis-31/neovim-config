@@ -1,0 +1,163 @@
+set number 
+syntax enable 
+"set mouse=a disable"
+set showcmd
+set encoding=utf-8
+set showmatch 
+set relativenumber
+
+call plug#begin('~/.vim/plugged')
+
+" THEMES PROJECT1N
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+"Plug 'EdenEast/nightfox.nvim' " Vim-Plug
+"Plug 'projekt0n/github-nvim-theme'
+
+"FILE EXPLORER
+Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+
+"FILE SEARCHING 
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+" Language Client
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
+" TypeScript Highlighting
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+
+" Emmet
+Plug 'mattn/emmet-vim'
+
+" Comments 
+Plug 'tpope/vim-commentary'
+
+" Status Bar
+Plug 'vim-airline/vim-airline'
+call plug#end()
+
+
+"THEME SECTION
+let g:lightline = {'colorscheme': 'tokyonight'}
+let g:tokyonight_style = "storm"
+
+" Load the colorscheme
+colorscheme tokyonight
+
+
+
+"FILE EXPLORER SECTION
+
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = []
+let g:NERDTreeStatusline = ''
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Toggle
+nnoremap <silent> <C-b> :NERDTreeToggle<CR>
+
+
+"INTEGRATED TERMINAL
+
+" open new split panes to right and below
+set splitright
+set splitbelow
+" turn terminal to normal mode with escape
+tnoremap <Esc> <C-\><C-n>
+" start terminal in insert mode
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+" open terminal on ctrl+n
+function! OpenTerminal()
+  split term://zsh
+  resize 10
+endfunction
+nnoremap <c-n> :call OpenTerminal()<CR>
+
+
+"SWITCHING BETWEEN PANELS
+
+" use alt+hjkl to move between split/vsplit panels
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-l> <C-\><C-n><C-w>l
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
+
+"FILE SEARCHING
+nnoremap <C-p> :FZF<CR>
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \}
+
+
+" requires silversearcher-ag
+" used to ignore gitignore files
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+
+" Emmet setup 
+let g:user_emmet_mode='n'
+let g:user_emmet_leader_key=','
+let g:user_emmet_settings={
+\ 'javascript':{
+\ 'extends': 'jsx'
+\}
+\}
+
+" Prettier setup
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+nnoremap <C-D> :Prettier<CR>
+
+
+"CocCommand 
+
+"Tab Press 
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+"Setup Comments
+nnoremap <space>/ :Commentary<CR>
+vnoremap <space>/ :Commentary<CR>
+
+"Setup Airline
+let g:airline#extensions#tabline#enabled = 1
+
+"Buffers
+nnoremap <S-Tab> :bprevious <CR>
+nnoremap <Tab> :bnext <CR>
+nnoremap <C-x> :bd <CR>
+ 
+"Personal Setup
+nnoremap <C-space> O <Esc>
+inoremap { {}<Esc>i
+inoremap [ []<Esc>i
+inoremap < <><Esc>i
+inoremap ' ''<Esc>i
+inoremap " ""<Esc>h i
+inoremap () ()<Esc>i
+inoremap ii <Esc>
+ 
+ 
+ 
+"Disable arrow keys
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+vnoremap <up> <nop>
+vnoremap <down> <nop>
+vnoremap <left> <nop>
+vnoremap <right> <nop>
+
